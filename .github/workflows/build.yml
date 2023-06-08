@@ -7,7 +7,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  laravel-tests:
+  build:
 
     runs-on: ubuntu-latest
 
@@ -18,7 +18,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Check if file exist
-      run: if [ ! -f resources/views/welcome.blade1.php ]; then exit 1; fi
+      run: if [ ! -f resources/views/welcome.blade.php ]; then exit 1; fi
 
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
@@ -39,3 +39,16 @@ jobs:
       run: vendor/bin/phpunit
     - name: Finish job
       run: echo "Finish job!"
+
+  deploy:
+    name: Deploy
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: johnbeynon/render-deploy-action@b0.0.8
+        with:
+          service-id: ${{ secrets.SERVICE_ID }}
+          api-key: ${{ secrets.RENDER_API_KEY }}
+
+    
