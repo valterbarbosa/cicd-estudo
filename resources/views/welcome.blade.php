@@ -45,7 +45,7 @@
                     </svg>
                 </div>
                 <div class="flex justify-center pt-8 sm:justify-start sm:pt-0">
-                    <h1>Welcome Laravel. Code...</h1>
+                    <h1>Welcome Laravel. Code..</h1>
                 </div>
                 </div>
             </div>
