@@ -1,20 +1,40 @@
-FROM richarvey/nginx-php-fpm:1.7.2
+#Dockerfile Example on running PHP Laravel app using Apache web server 
 
-COPY . .
+FROM php:8.1-apache
 
-# Image config
-ENV SKIP_COMPOSER 1
-ENV WEBROOT /var/www/html/public
-ENV PHP_ERRORS_STDERR 1
-ENV RUN_SCRIPTS 1
-ENV REAL_IP_HEADER 1
+# Install necessary libraries
+RUN apt-get update && apt-get install -y \
+    libonig-dev \
+    libzip-dev
 
-# Laravel config
-ENV APP_ENV production
-ENV APP_DEBUG false
-ENV LOG_CHANNEL stderr
+# Install PHP extensions
+RUN docker-php-ext-install \
+    mbstring \
+    zip
 
-# Allow composer to run as root
-ENV COMPOSER_ALLOW_SUPERUSER 1
+# Copy Laravel application
+COPY . /var/www/html
 
-CMD ["/start.sh"]
+# Set working directory
+WORKDIR /var/www/html
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Install dependencies
+RUN composer install
+
+# Change ownership of our applications
+RUN chown -R www-data:www-data /var/www/html
+
+RUN docker-php-ext-install mbstring
+
+COPY .env.example .env
+RUN php artisan key:generate
+
+# Expose port 80
+EXPOSE 80
+
+# Adjusting Apache configurations
+RUN a2enmod rewrite
+COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
