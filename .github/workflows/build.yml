@@ -37,8 +37,8 @@ jobs:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
       run: vendor/bin/phpunit
-    - name: Finish job
-      run: echo "Finish job!"
+    - name: Finish build
+      run: echo "Finish build!"
 
   deploy:
     name: Deploy
@@ -50,5 +50,19 @@ jobs:
         with:
           service-id: ${{ secrets.SERVICE_ID }}
           api-key: ${{ secrets.RENDER_API_KEY }}
+
+          script: |
+            echo 'Running Composer'
+            composer global require hirak/prestissimo
+            composer install --no-dev --working-dir=/var/www/html
+            echo 'Caching config...'
+            php artisan config:cache
+            echo 'Caching routes...'
+            php artisan route:cache
+            php artisan migrate --force
+      - name: Finish deploy
+        run: echo "Finish deploy!"
+
+
 
     
