@@ -44,24 +44,30 @@ jobs:
     name: Deploy
     needs: [build]
     runs-on: ubuntu-latest
-
     steps:
-      - uses: johnbeynon/render-deploy-action@v0.0.8
-        with:
-          service-id: ${{ secrets.SERVICE_ID }}
-          api-key: ${{ secrets.RENDER_API_KEY }}
+      - uses: actions/checkout@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
-          script: |
-            echo 'Running Composer'
-            composer global require hirak/prestissimo
-            composer install --no-dev --working-dir=/var/www/html
-            echo 'Caching config...'
-            php artisan config:cache
-            echo 'Caching routes...'
-            php artisan route:cache
-            php artisan migrate --force
-      - name: Finish deploy
-        run: echo "Finish deploy!"
+    # steps:
+    #   - uses: johnbeynon/render-deploy-action@v0.0.8
+    #     with:
+    #       service-id: ${{ secrets.SERVICE_ID }}
+    #       api-key: ${{ secrets.RENDER_API_KEY }}
+
+    #       script: |
+    #         echo 'Running Composer'
+    #         composer global require hirak/prestissimo
+    #         composer install --no-dev --working-dir=/var/www/html
+    #         echo 'Caching config...'
+    #         php artisan config:cache
+    #         echo 'Caching routes...'
+    #         php artisan route:cache
+    #         php artisan migrate --force
+    #   - name: Finish deploy
+    #     run: echo "Finish deploy!"
 
 
 
