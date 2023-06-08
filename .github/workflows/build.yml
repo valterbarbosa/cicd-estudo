@@ -45,11 +45,14 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy -a cicd
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      - name: Hello world action step
+        id: hello
+        uses: back4app/Github-Ci-Cd-Example@v1
+        with:
+          appid: ${{ secrets.APP_ID }}
+    # Use the output from the `hello` step
+      - name: Finish deploy
+        run: echo "Finish deploy!"
 
     # steps:
     #   - uses: johnbeynon/render-deploy-action@v0.0.8
