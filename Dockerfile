@@ -47,7 +47,11 @@ RUN php artisan key:generate
 # Expose port 80
 EXPOSE 80
 
+# Adjusting Apache configurations
+RUN a2enmod rewrite
+COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 
+FROM gcr.io/kaniko-project/executor:v1.9.1-debug
 
 # Start Laravel Server
 CMD php artisan serve --host=0.0.0.0 --port=8000
