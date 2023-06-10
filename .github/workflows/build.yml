@@ -47,7 +47,7 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: back4app/Github-Ci-Cd-Example@v1
+        uses: omurilo/action-back4app@v3
         with:
           project: 'cicd-estudo'
           accountKey: ${{ secrets.ACCOUNT_KEY }}
