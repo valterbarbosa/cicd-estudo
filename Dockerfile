@@ -17,6 +17,13 @@ USER root
 
 COPY . /app
 
+
+
 RUN composer install
+
+COPY .env.example .env
+RUN php artisan key:generate
+
+EXPOSE 9000
 
 ENTRYPOINT [ "php", "artisan", "serve", "--host=0.0.0.0", "--port=9000"] 
