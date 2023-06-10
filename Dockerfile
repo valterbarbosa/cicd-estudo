@@ -17,12 +17,10 @@ USER root
 
 COPY . /app
 
-
-
 RUN composer install
 
-COPY .env.example .env
-RUN php artisan key:generate
+#COPY .env.example .env
+#RUN php artisan key:generate
 
 EXPOSE 9000
 
