@@ -19,7 +19,7 @@ RUN composer install
 COPY .env.example .env
 RUN php artisan key:generate
 
-# Expose port 9000
+# Expose port 9000  
 EXPOSE 9000
 
 # Start Laravel Server
