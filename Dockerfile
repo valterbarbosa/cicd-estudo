@@ -3,16 +3,6 @@ FROM php:8.1.6-fpm-alpine
 # Set working directory
 WORKDIR /app
 
-# Install necessary libraries
-RUN apk update && apk add \
-    build-base \
-    git \
-    curl \
-    zip \
-    libzip-dev \
-    libpq-dev \
-    unzip
-
 # copy composer from external image
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
